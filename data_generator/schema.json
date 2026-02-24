@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FinancialMessage",
+  "type": "object",
+  "properties": {
+    "transaction_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "amount": {
+      "type": "number"
+    },
+    "currency": {
+      "type": "string",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "sender_iban": {
+      "type": "string"
+    },
+    "receiver_iban": {
+      "type": "string"
+    },
+    "settlement_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string"
+    }
+  },
+  "required": ["transaction_id", "amount", "currency", "sender_iban", "receiver_iban", "settlement_date", "status"]
+}
