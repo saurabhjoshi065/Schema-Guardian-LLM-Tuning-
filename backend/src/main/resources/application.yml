@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: schema-guardian-backend
+  
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: schema-guardian-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost:5432}/${POSTGRES_DB:guardian_db}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+# Custom configurations
+sidecar:
+  url: ${SIDECAR_URL:http://localhost:8000/validate}
+  timeout-ms: 2000
+
+kafka:
+  topics:
+    inbound: financial-messages-in
+    dlq: financial-messages-flagged
