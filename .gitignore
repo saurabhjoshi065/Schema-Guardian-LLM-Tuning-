@@ -1,0 +1,49 @@
+# Compiled class files
+*.class
+
+# Log files
+*.log
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual env
+venv/
+.venv/
+env/
+.env/
+
+# python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# node_modules
+node_modules/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Models (GGUF, etc.)
+*.gguf
+*.bin
+*.pt
+*.safetensors
+
+# Datasets
+*.jsonl
+*.csv
+
+# OS files
+.DS_Store
+Thumbs.db
