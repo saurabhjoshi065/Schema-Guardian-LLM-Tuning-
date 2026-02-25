@@ -3,11 +3,35 @@
 ## Overview
 A production-ready system for financial JSON message validation using local-first LLM classification.
 
-## Data Flow
+## Message Flow Diagram
+
+```mermaid
+graph TD
+    A[Producer] -->|ISO 20022 JSON| B(Kafka Topic)
+    B --> C[Spring Boot Backend]
+    C -->|POST /validate| D[FastAPI Sidecar]
+    D -->|Llama-3/Qwen GGUF| E{Classification}
+    E -->|SAFE| F[PostgreSQL]
+    E -->|FLAGGED| G[Dead Letter Queue / Audit Topic]
+    
+    subgraph "Inference Sidecar (LLM)"
+    D
+    E
+    end
+    
+    subgraph "Main Infrastructure"
+    B
+    C
+    F
+    G
+    end
+```
+
+## Data Flow Details
 1. **Producer:** Financial systems publish ISO 20022-like JSON messages to Kafka.
 2. **Consumer (Spring Boot):** Listens to Kafka topics, parses JSON, and performs initial structure check.
 3. **Inference (FastAPI Sidecar):** Spring Boot sends the message body to the FastAPI sidecar.
-4. **Classification (Llama-3 GGUF):** The sidecar uses `llama.cpp` to classify the message as "SAFE" or "FLAGGED".
+4. **Classification (Llama-3/Qwen GGUF):** The sidecar uses `llama.cpp` to classify the message as "SAFE" or "FLAGGED".
 5. **Routing (Spring Boot):**
    - **SAFE:** Message persists to PostgreSQL (production database).
    - **FLAGGED:** Message is routed to a Dead Letter Queue (DLQ) or Audit log.
